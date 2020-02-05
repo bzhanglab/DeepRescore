@@ -44,6 +44,7 @@ Arguments:
 
 ### Input
 In general, the main inputs to run DeepRescore are identification result from one of the four search engines (MS-GF+, X!Tandem, Comet and MaxQuant) and the MS/MS data used for searching. If the identification software is MaxQuant, then the MS/MS data is not needed because MS/MS data is included in MaxQuant search result ( folder ``conbined``). Below is the table showing the detailed search result format and MS/MS data format supported for each search engine. Using MS-GF+, X!Tandem or Comet, raw MS/MS data must be converted to MGF format using [ProteoWizard](http://www.proteowizard.org/). Multiple MGF files (different fractions) from the sample or same TMT/iTRAQ experiment should be combined into one MGF file.
+
 | Search engine | Identification format | MS/MS data format |
 |---|---|---|
 | Comet | .pepxml | MGF |
