@@ -217,7 +217,7 @@ process train_autoRT {
 	"""
 }
 
-process predicte_autoRT {
+process predict_autoRT {
 
 	tag "$sample"
 
