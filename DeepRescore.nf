@@ -19,7 +19,7 @@ params.mem = 8 // unit is G
 def helpMessage() {
     log.info"""
     =========================================
-    neoflow => variant annotation and customized database construction
+    DeepRescore => Rescore PSMs
     =========================================
     Usage:
     nextflow run neoflow_db.nf
