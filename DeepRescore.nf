@@ -8,7 +8,6 @@ software = params.software
 spectrum_file = file(params.spectrum_file)
 output_path = file(params.output_path)
 instrument = params.instrument
-pDeep2_soft_path = params.pDeep2_path
 energy = params.energy
 threads = params.threads
 memory = params.memory
@@ -44,7 +43,7 @@ process got_features {
 	script:
 
 	"""
-	java -Xmx${memory}g -jar ${baseDir}/bin/PDV-1.6.1.beta.features/PDV-1.6.1.beta.features.jar \
+	java -Xmx${memory}g -jar ${baseDir}/bin/PDV-1.6.1.beta.features/PDV-1.6.1.beta.features-jar-with-dependencies.jar \
 		-r $result_file \
 		-rt $result_type \
 		-s $spectrum_file \
@@ -120,7 +119,9 @@ process run_pdeep2 {
 
 	publishDir "${output_path}/pDeep2_prediction/", mode: "copy", overwrite: true
 
-	input:	
+	input:
+	//file pdeep2_folder
+	
 	file(pdeep2_folder) from pDeep2_prediction_ch
 
 	output:
@@ -130,7 +131,7 @@ process run_pdeep2 {
 	"""
 	#export CUDA_VISIBLE_DEVICES=0
 
-	python predict.py -e $energy -i $instrument -in ${pdeep2_folder}/${sample}_pdeep2_prediction_unique.txt -out ./${sample}_pdeep2_prediction_results.txt
+	python /opt/pDeep2/predict.py -e $energy -i $instrument -in ${pdeep2_folder}/${sample}_pdeep2_prediction_unique.txt -out ./${sample}_pdeep2_prediction_results.txt
 	"""
 }
 
@@ -158,7 +159,7 @@ process process_pDeep2_results {
 	mv $pDeep2_results ${pDeep2_results}.mgf
 	Rscript ${baseDir}/bin/format_pDeep2_titile.R $pDeep2_prediction $rawPSMs_file ./${sample}_format_titles.txt
 	
-	java -Xmx${memory}g -cp ${baseDir}/bin/PDV-1.6.1.beta.features/PDV-1.6.1.beta.features.jar PDVGUI.GenerateSpectrumTable \
+	java -Xmx${memory}g -cp ${baseDir}/bin/PDV-1.6.1.beta.features/PDV-1.6.1.beta.features-jar-with-dependencies.jar PDVGUI.GenerateSpectrumTable \
 		./${sample}_format_titles.txt $spectrum_file ${pDeep2_results}.mgf ./${sample}_spectrum_pairs.txt $software
 
 	mkdir sections sections_results
@@ -184,6 +185,8 @@ process train_autoRT {
 	publishDir "${output_path}/autoRT_train/", mode: "copy", overwrite: true
 
 	input:
+	//file autoRT_train_folder
+	//file autoRT_prediction_folder
 	file(sa_file) from pDee2_next_ch
 	file(autoRT_train_folder) from autoRT_train_ch
 
@@ -217,7 +220,7 @@ process train_autoRT {
 	"""
 }
 
-process predict_autoRT {
+process predicte_autoRT {
 
 	tag "$sample"
 
