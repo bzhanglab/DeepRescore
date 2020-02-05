@@ -78,7 +78,7 @@ if (software == "msgf") {
 if (software == "maxquant"){
 
 
-    process calc_basic_features {
+    process calc_basic_features_mq {
 
         tag "$sample"
 
