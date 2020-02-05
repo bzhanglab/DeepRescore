@@ -28,8 +28,10 @@ def helpMessage() {
       --ms_file              MS/MS data in MGF format. If the search engine is MaxQuant, this parameter is not useful.
       --se                   The name of search engine, msgf:MS-GF+, xtandem:X!Tandem, comet:Comet or maxquant:MaxQuant.
                              Default is "msgf" (MS-GF+).
-      --ms_instrument        The MS instrument used to generate the MS/MS data. Default is "Lumos".  
-      --ms_energy            The energy used in MS/MS data generation.
+      --ms_instrument        The MS instrument used to generate the MS/MS data. This is used by pDeep2 for MS/MS spectrum prediction. 
+                             Default is "Lumos".  
+      --ms_energy            The energy used in MS/MS data generation. This is used by pDeep2 for MS/MS spectrum prediction.
+                             Default is 0.34.
       --out_dir              Output folder, default is "./output"
       --prefix               The prefix of output file(s).
       --decoy_prefix         The prefix of decoy proteins. Default is "XXX_".
@@ -114,39 +116,110 @@ if (software == "maxquant"){
 
 } else {
 
-    process calc_basic_features {
+    if (software == "xtandem"){
 
-        tag "$sample"
+        process xml2mzid{
 
-        publishDir "$output_path", mode: "copy", overwrite: true
+            tag "${sample}"
 
-        input:
-        file result_file
-        file spectrum_file
+            container "bzhanglab/neoflow:1.0"
 
-        output:
-        file("features.txt") into all_features_ch1
-        file("features.txt") into all_features_ch2
-        file("features.txt") into all_features_ch3
-        file("features.txt") into all_features_ch4
+            input:
+            file result_file
 
-        script:
+            output:
+            file("${res_file}") into mzid_file
+    
 
-        """
-        java -Xmx${memory}g -jar ${baseDir}/bin/PDV-1.6.1.beta.features/PDV-1.6.1.beta.features-jar-with-dependencies.jar \
-            -r $result_file \
-            -rt $result_type \
-            -s $spectrum_file \
-            -st 1 \
-            -i * \
-            -k s \
-            -o ./ \
-            -a 0.05 \
-            -c 0 \
-            -decoy ${decoy_prefix} \
-            -ft pdf \
-            --features
-        """
+            script:
+            res_file = "${sample}.mzid"
+            """
+            #!/bin/sh
+            ## convert xml to mzid
+            java -Xmx${memory}g -jar /opt/mzidlib-1.7/mzidlib-1.7.jar Tandem2mzid \
+                ${result_file} \
+                ${res_file} \
+                -outputFragmentation false \
+                -decoyRegex ${decoy_prefix} \
+                -databaseFileFormatID MS:1001348 \
+                -massSpecFileFormatID MS:1001062 \
+                -idsStartAtZero false \
+                -compress false \
+                -proteinCodeRegex "\\S+"
+            """
+        }
+
+        process calc_basic_features_xt {
+
+            tag "$sample"
+
+            publishDir "$output_path", mode: "copy", overwrite: true
+
+            input:
+            file mzid_file
+            file spectrum_file
+
+            output:
+            file("features.txt") into all_features_ch1
+            file("features.txt") into all_features_ch2
+            file("features.txt") into all_features_ch3
+            file("features.txt") into all_features_ch4
+
+            script:
+
+            """
+            java -Xmx${memory}g -jar ${baseDir}/bin/PDV-1.6.1.beta.features/PDV-1.6.1.beta.features-jar-with-dependencies.jar \
+                -r $mzid_file \
+                -rt $result_type \
+                -s $spectrum_file \
+                -st 1 \
+                -i * \
+                -k s \
+                -o ./ \
+                -a 0.05 \
+                -c 0 \
+                -decoy ${decoy_prefix} \
+                -ft pdf \
+                --features
+            """
+        }
+
+    }else {
+
+        process calc_basic_features {
+
+            tag "$sample"
+
+            publishDir "$output_path", mode: "copy", overwrite: true
+
+            input:
+            file result_file
+            file spectrum_file
+
+            output:
+            file("features.txt") into all_features_ch1
+            file("features.txt") into all_features_ch2
+            file("features.txt") into all_features_ch3
+            file("features.txt") into all_features_ch4
+
+            script:
+
+            """
+            java -Xmx${memory}g -jar ${baseDir}/bin/PDV-1.6.1.beta.features/PDV-1.6.1.beta.features-jar-with-dependencies.jar \
+                -r $result_file \
+                -rt $result_type \
+                -s $spectrum_file \
+                -st 1 \
+                -i * \
+                -k s \
+                -o ./ \
+                -a 0.05 \
+                -c 0 \
+                -decoy ${decoy_prefix} \
+                -ft pdf \
+                --features
+            """
+        }
     }
 
 }
@@ -170,9 +243,7 @@ process pga_fdr_control {
     script:
     """
     mkdir peptide_level psm_level
-
     Rscript ${baseDir}/bin/got_pga_input.R $feature_file $software ./${sample}-rawPSMs.txt
-
     Rscript ${baseDir}/bin/calculate_fdr.R ./ $sample ${baseDir}/bin/protein.pro-ref.fasta
     """
 }
@@ -223,7 +294,6 @@ process run_pdeep2 {
     script:
     """
     #export CUDA_VISIBLE_DEVICES=0
-
     python /opt/pDeep2/predict.py -e $energy -i $instrument -in ${pdeep2_folder}/${sample}_pdeep2_prediction_unique.txt -out ./${sample}_pdeep2_prediction_results.txt
     """
 }
@@ -248,13 +318,11 @@ process process_pDeep2_results {
     script:
     """
     #!/bin/sh
-
     mv $pDeep2_results ${pDeep2_results}.mgf
     Rscript ${baseDir}/bin/format_pDeep2_titile.R $pDeep2_prediction $rawPSMs_file ./${sample}_format_titles.txt
     
     java -Xmx${memory}g -cp ${baseDir}/bin/PDV-1.6.1.beta.features/PDV-1.6.1.beta.features-jar-with-dependencies.jar PDVGUI.GenerateSpectrumTable \
         ./${sample}_format_titles.txt $spectrum_file ${pDeep2_results}.mgf ./${sample}_spectrum_pairs.txt $software
-
     mkdir sections sections_results
     Rscript ${baseDir}/bin/similarity/devide_file.R ./${sample}_spectrum_pairs.txt $threads ./sections/
     for file in ./sections/*
@@ -289,15 +357,12 @@ process train_autoRT {
     script:
     """
     #!/bin/sh
-
     set -e
-
     mkdir -p ./autoRT_models
     for file in ${autoRT_train_folder}/*.txt
     do
         fraction=`basename \${file} .txt`
         mkdir -p ./autoRT_models/\${fraction}
-
         python /opt/AutoRT/autort.py train \
         -i \$file \
         -o ./autoRT_models/\${fraction} \
@@ -307,7 +372,6 @@ process train_autoRT {
         -m /opt/AutoRT/models/base_models_PXD006109/model.json \
         -rlr \
         -n 10 
-
     done
     wait
     """
@@ -332,22 +396,18 @@ process predicte_autoRT {
     script:
     """
     #!/bin/sh
-
     set -e
-
     mkdir -p ./autoRT_prediction
     mkdir -p ./autoRT_prediction/results
     for file in ${autoRT_prediction_folder}/*.txt
     do
         fraction=`basename \${file} .txt`
         mkdir -p ./autoRT_prediction/\${fraction}
-
         python /opt/AutoRT/autort.py predict \
         -t \$file \
         -s ${autoRT_models_folder}/\${fraction}/model.json \
         -o ./autoRT_prediction/\${fraction} \
         -p \${fraction}
-
     done
     wait
     for file in ${autoRT_prediction_folder}/*.txt
@@ -421,4 +481,3 @@ process generate_pdv_input {
     """
 
 }
-
