@@ -116,7 +116,7 @@ process run_pdeep2 {
 
 	tag "$sample"
 
-	container "proteomics/autort:latest"
+	container "proteomics/pdeep2:latest"
 
 	publishDir "${output_path}/pDeep2_prediction/", mode: "copy", overwrite: true
 
@@ -130,7 +130,7 @@ process run_pdeep2 {
 	"""
 	#export CUDA_VISIBLE_DEVICES=0
 
-	python ${pDeep2_soft_path}/predict.py -e $energy -i $instrument -in ${pdeep2_folder}/${sample}_pdeep2_prediction_unique.txt -out ./${sample}_pdeep2_prediction_results.txt
+	python predict.py -e $energy -i $instrument -in ${pdeep2_folder}/${sample}_pdeep2_prediction_unique.txt -out ./${sample}_pdeep2_prediction_results.txt
 	"""
 }
 
