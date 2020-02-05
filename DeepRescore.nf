@@ -143,7 +143,7 @@ if (software == "maxquant"){
             -o ./ \
             -a 0.05 \
             -c 0 \
-            -decoy "XXX_" \
+            -decoy ${decoy_prefix} \
             -ft pdf \
             --features
         """
@@ -421,3 +421,4 @@ process generate_pdv_input {
     """
 
 }
+
