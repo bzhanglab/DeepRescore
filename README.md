@@ -67,7 +67,7 @@ nextflow run DeepRescore.nf --id_file ./example_data/A1101.pep.xml \
 	--cpu 4 \
 	--mem 8
 ```
-The example data can be downloaded through this link: [test_data](http://pdv.zhang-lab.org/data/download/deeprescore/example_data.tar.gz).
+It took about one and half hour to run the example on a Linux server (12 threads, 64 RAM, GPU: TITAN Xp). The example data can be downloaded through this link: [test_data](http://pdv.zhang-lab.org/data/download/deeprescore/example_data.tar.gz).
 
 ### Output
 The final output data can be found in this folder `out_dir/percolator_results`. Here `out_dir` is the output directory specified through parameter `--out_dir`. There are two files in this folder: `*_psm.txt` and `*_pep.txt`. The first one is the result controled FDR at PSM level and the second one is the result controled FDR at peptide level. Below is an example of `*_psm.txt`. The format of `*_pep.txt` is the same with `*_psm.txt`. Users can filter the result based on the column `q-value` (for example, q-value <= 0.01).
