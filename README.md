@@ -31,8 +31,10 @@ Arguments:
   --ms_file              MS/MS data in MGF format. If the search engine is MaxQuant, this parameter is not useful.
   --se                   The name of search engine, msgf:MS-GF+, xtandem:X!Tandem, comet:Comet or maxquant:MaxQuant.
                          Default is "msgf" (MS-GF+).
-  --ms_instrument        The MS instrument used to generate the MS/MS data. This is used by pDeep2 for MS/MS spectrum prediction. Default is "Lumos".
-  --ms_energy            The energy used in MS/MS data generation. This is used by pDeep2 for MS/MS spectrum prediction. Default is 0.34.
+  --ms_instrument        The MS instrument used to generate the MS/MS data. 
+                         This is used by pDeep2 for MS/MS spectrum prediction. Default is "Lumos".
+  --ms_energy            The energy used in MS/MS data generation. 
+                         This is used by pDeep2 for MS/MS spectrum prediction. Default is 0.34.
   --out_dir              Output folder, default is "./output"
   --prefix               The prefix of output file(s).
   --decoy_prefix         The prefix of decoy proteins. Default is "XXX_".
