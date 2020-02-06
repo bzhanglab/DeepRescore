@@ -477,7 +477,7 @@ process generate_pdv_input {
     file (percolator_input_file) from percolator_input_ch2
 
     output:
-    set file("${sample}_pep_pdv_input.txt"), file("${sample}_pep_pdv_input_fdr_1.txt"), file("${sample}_psm_pdv_input.txt"), file("${sample}_psm_pdv_input_fdr_1.txt") into pdv_input_ch
+    set file("${sample}_pep_final*.tsv"), file("${sample}_psm_final*.tsv") into pdv_input_ch
 
     script:
     """
