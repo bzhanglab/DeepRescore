@@ -13,7 +13,7 @@ git clone https://github.com/bzhanglab/DeepRescore
 
 4. Install [nvidia-docker](https://github.com/NVIDIA/nvidia-docker) (>=2.2.2) for [**AutoRT**](https://github.com/bzhanglab/AutoRT/)  and [**pDeep2**](https://github.com/pFindStudio/pDeep/tree/master/pDeep2) by following the instruction at [https://github.com/NVIDIA/nvidia-docker](https://github.com/NVIDIA/nvidia-docker). **Please note GPU is required to run DeepRescore**.
 
-All other tools used by DeepRescore have been dockerized and will be automatically installed when DeepRescore is run in the first time on a computer.
+All other tools used by DeepRescore have been dockerized and will be automatically installed when DeepRescore is run in the first time on a computer. DeepRescore has been tested on Linux.
 
 ## Usage
 
