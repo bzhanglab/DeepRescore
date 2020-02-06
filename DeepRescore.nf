@@ -78,7 +78,7 @@ if (software == "msgf") {
 
 
 if (software == "maxquant"){
-
+    spectrum_file = result_file + "/generatesMGF"
 
     process calc_basic_features_mq {
 
@@ -436,6 +436,7 @@ process generate_percolator_input {
 
     output:
     file ("./format.pin") into percolator_input_ch
+    file ("./format.pin") into percolator_input_ch2
 
     script:
     """
@@ -467,17 +468,20 @@ process generate_pdv_input {
     tag "$sample"
 
     container "proteomics/pga:latest"   
+	
+    publishDir "${output_path}/DeepRescore_results/", mode: "copy", overwrite: true
 
     input:
     set file(pep_level_result), file(psm_level_result) from percolator_output_ch
     file (features_file) from all_features_ch4
+    file (percolator_input_file) from percolator_input_ch2
 
     output:
-    set file("${sample}_pep_pdv_input.txt"), file("${sample}_pep_pdv_input_fdr_1.txt") into pdv_input_ch
+    set file("${sample}_pep_pdv_input.txt"), file("${sample}_pep_pdv_input_fdr_1.txt"), file("${sample}_psm_pdv_input.txt"), file("${sample}_psm_pdv_input_fdr_1.txt") into pdv_input_ch
 
     script:
     """
-    Rscript ${baseDir}/bin/PDV/generate_pdv_input.R ./ $sample $features_file
+    Rscript ${baseDir}/bin/PDV/generate_pdv_input.R ./ $sample $features_file $percolator_input_file
     """
 
 }
