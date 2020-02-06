@@ -23,8 +23,8 @@ pdv_input$modification <- ifelse(pdv_input$modification == "", "-",pdv_input$mod
 
 pdv_input_fdr_1 <- pdv_input %>% filter(q_value <= 0.01)
 
-write.table(pdv_input, paste(result_folder, sample, "_pep_pdv_input.txt", sep=""), row.names=F, quote=F, sep="\t")
-write.table(pdv_input_fdr_1, paste(result_folder, sample, "_pep_pdv_input_fdr_1.txt", sep=""), row.names=F, quote=F, sep="\t")
+write.table(pdv_input, paste(result_folder, sample, "_pep_final.tsv", sep=""), row.names=F, quote=F, sep="\t")
+write.table(pdv_input_fdr_1, paste(result_folder, sample, "_pep_final_qvalue0.01.tsv", sep=""), row.names=F, quote=F, sep="\t")
 
 psm_result <- fread(paste(result_folder, sample, "_psms.txt", sep="")) %>%
         select(PSMId, score, `q-value`)
@@ -40,5 +40,5 @@ pdv_input$modification <- ifelse(pdv_input$modification == "", "-",pdv_input$mod
 
 pdv_input_fdr_1 <- pdv_input %>% filter(q_value <= 0.01)
 
-write.table(pdv_input, paste(result_folder, sample, "_psm_pdv_input.txt", sep=""), row.names=F, quote=F, sep="\t")
-write.table(pdv_input_fdr_1, paste(result_folder, sample, "_psm_pdv_input_fdr_1.txt", sep=""), row.names=F, quote=F, sep="\t")
+write.table(pdv_input, paste(result_folder, sample, "_psm_final.tsv", sep=""), row.names=F, quote=F, sep="\t")
+write.table(pdv_input_fdr_1, paste(result_folder, sample, "_psm_final_qvalue0.01.tsv", sep=""), row.names=F, quote=F, sep="\t")
