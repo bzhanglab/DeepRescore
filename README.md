@@ -1,6 +1,6 @@
 # DeepRescore
 ## Overview
-**DeepRescore** is an immunopeptidomics data analysis tool that leverages deep learning-derived peptide features to rescore peptide-spectrum matches (PSMs). DeepRescore takes as input MS/MS data in MGF format and identification results from a search engine. The current version supports four search engines, MS-GF+, Comet, X!Tandem, and MaxQuant.
+**DeepRescore** is an immunopeptidomics data analysis tool that leverages deep learning-derived peptide features to rescore peptide-spectrum matches (PSMs). DeepRescore takes as input MS/MS data in MGF format and identification results from a search engine. The current version supports four search engines, [MS-GF+](https://github.com/MSGFPlus/msgfplus), [Comet](http://comet-ms.sourceforge.net/), [X!Tandem](https://www.thegpm.org/TANDEM/), and [MaxQuant](https://maxquant.org/).
 
 ## Installation
 1. Download DeepRescore:
