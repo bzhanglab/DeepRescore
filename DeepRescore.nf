@@ -22,7 +22,7 @@ def helpMessage() {
     DeepRescore => Rescore PSMs
     =========================================
     Usage:
-    nextflow run neoflow_db.nf
+    nextflow run DeepRescore.nf
     Arguments:
       --id_file              Identification result.
       --ms_file              MS/MS data in MGF format. If the search engine is MaxQuant, this parameter is not useful.
