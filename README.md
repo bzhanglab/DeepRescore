@@ -18,14 +18,14 @@ All other tools used by DeepRescore have been dockerized and will be automatical
 ## Usage
 
 ```sh
-○ → nextflow run deeprescore.nf --help
+○ → nextflow run DeepRescore.nf --help
 N E X T F L O W  ~  version 19.10.0
 Launching `deeprescore.nf` [special_hamilton] - revision: 2817bc64da
 =========================================
 DeepRescore => Rescore PSMs
 =========================================
 Usage:
-nextflow run neoflow_db.nf
+nextflow run DeepRescore.nf
 Arguments:
   --id_file              Identification result.
   --ms_file              MS/MS data in MGF format. If the search engine is MaxQuant, this parameter is not useful.
