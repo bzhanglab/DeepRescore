@@ -82,6 +82,9 @@ The final output data can be found in this folder `out_dir/DeepRescore_results`.
 
 
 
+## How to cite:
+
+Kai Li Antrix Jain Anna Malovannaya Bo Wen Bing Zhang (2020), **DeepRescore: Leveraging Deep Learning to Improve Peptide Identification in Immunopeptidomics**. Proteomics. [doi:10.1002/pmic.201900334](https://doi.org/10.1002/pmic.201900334)
 
 
 
