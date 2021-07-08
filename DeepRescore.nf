@@ -301,6 +301,8 @@ process run_pdeep2 {
 process process_pDeep2_results {
 
     tag "$sample"
+    
+    cpus "$params.cpu"
 
     container "proteomics/pga:latest"
 
@@ -340,6 +342,8 @@ process process_pDeep2_results {
 process train_autoRT {
 
     tag "$sample"
+    
+    cpus "$params.cpu"
 
     container "proteomics/autort:latest"
 
@@ -380,6 +384,8 @@ process train_autoRT {
 process predicte_autoRT {
 
     tag "$sample"
+    
+    cpus "$params.cpu"
 
     container "proteomics/autort:latest"
 
@@ -447,6 +453,8 @@ process generate_percolator_input {
 
 process run_percolator {
     tag "$sample"
+    
+    cpus "$params.cpu"
 
     container "bzhanglab/percolator:3.4"
 
