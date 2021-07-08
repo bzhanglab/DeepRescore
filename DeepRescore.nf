@@ -278,6 +278,8 @@ process generate_train_prediction_data {
 process run_pdeep2 {
 
     tag "$sample"
+    
+    cpus "$params.cpu"
 
     container "proteomics/pdeep2:latest"
 
