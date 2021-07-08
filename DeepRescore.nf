@@ -413,9 +413,9 @@ process predicte_autoRT {
     for file in ${autoRT_prediction_folder}/*.txt
     do
         fraction=`basename \${file} .txt`
-        cp ./autoRT_prediction/\${fraction}/\${fraction}.csv ./autoRT_prediction/results/
+        cp ./autoRT_prediction/\${fraction}/\${fraction}.tsv ./autoRT_prediction/results/
     done
-    awk 'NR==1 {header=\$_} FNR==1 && NR!=1 { \$_ ~ \$header getline; } {print}' ./autoRT_prediction/results/*.csv \
+    awk 'NR==1 {header=\$_} FNR==1 && NR!=1 { \$_ ~ \$header getline; } {print}' ./autoRT_prediction/results/*.tsv \
     > ./autoRT_prediction/results/${sample}_results.txt
     """
 }
