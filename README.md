@@ -45,7 +45,7 @@ Arguments:
 ```
 
 ### Input
-In general, the main inputs to run DeepRescore are identification result from one of the four search engines (MS-GF+, X!Tandem, Comet and MaxQuant) and the MS/MS data used for searching. If the identification software is MaxQuant, then the MS/MS data is not needed because MS/MS data is included in MaxQuant search result ( folder ``conbined``). Below is the table showing the detailed search result format and MS/MS data format supported for each search engine. Using MS-GF+, X!Tandem or Comet, raw MS/MS data must be converted to MGF format using [ProteoWizard](http://www.proteowizard.org/). Multiple MGF files (different fractions) from the sample or same TMT/iTRAQ experiment should be combined into one MGF file. **Only oxidation of M is supported as variable modification**. Please note if DeepRescore is used to rescore MaxQuant result, the FDR cutoff should be set as 100% when performing the MaxQuant search, otherwise target PSMs may be filtered by MaxQuant's FDR calculation before rescoring using DeepRescore.
+In general, the main inputs to run DeepRescore are identification result from one of the four search engines (MS-GF+, X!Tandem, Comet and MaxQuant) and the MS/MS data used for searching. If the identification software is MaxQuant, then the MS/MS data is not needed because MS/MS data is included in MaxQuant search result ( folder ``combined``, **mqpar.xml** is also required to be present in the ``combined`` folder). Below is the table showing the detailed search result format and MS/MS data format supported for each search engine. Using MS-GF+, X!Tandem or Comet, raw MS/MS data must be converted to MGF format using [ProteoWizard](http://www.proteowizard.org/). Multiple MGF files (different fractions) from the sample or same TMT/iTRAQ experiment should be combined into one MGF file. **Only oxidation of M is supported as variable modification**. Please note if DeepRescore is used to rescore MaxQuant result, the FDR cutoff should be set as 100% when performing the MaxQuant search, otherwise target PSMs may be filtered by MaxQuant's FDR calculation before rescoring using DeepRescore.
 
 For MGF file conversion, we recommend to use the following command line:
 
@@ -58,7 +58,7 @@ msconvert --filter "peakPicking true 1-2" --mgf *.raw
 | Comet | .pepxml | MGF |
 | MS-GF+ | .mzid | MGF |
 | X!Tandem | .xml | MGF |
-| MaxQuant | /conbined/ | - |
+| MaxQuant | /combined/ | - |
 
 Below is an example:
 ```sh
